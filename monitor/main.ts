@@ -33,6 +33,21 @@ interface StatusCheckTransaction {
     amount: string
 }
 
+interface Link {
+    _id: string;
+    nickname: string;
+    userId: string;
+    accountId: string;
+    link: string;
+    reference: string;
+    recipient: string;
+    network: string;
+    expectedAmount: number;
+    status: string;
+    createdAt: Date;
+    amountReceived: number;
+}
+
 async function checker(array: Data[], connection: Connection, keyArray: string, keyArrayValidate: string) {
     const interval = setInterval(async () => {
         const now = new Date();
@@ -142,6 +157,27 @@ class Database {
         }
     }
 
+    public async getDatasByStatus(): Promise<Link[]> {
+        const query = { status: { $in: ["created", "pending"] } };
+        const cursor = this.collection.find(query);
+        const links = await cursor.toArray();
+
+        console.log(`[X] getLinksByStatus : found ${links.length} links`);
+
+        return links;
+    }
+
+    public async convertLinksToDatas(links: Link[]): Promise<Data[]> {
+        let data: Data[] = links.map((link: Link) => ({
+            db_id: link._id.toString(),
+            reference: link.reference,
+            recipient: link.recipient,
+            amount: link.expectedAmount,
+            network: link.network
+        }));
+        return data;
+    }
+
     public async close(): Promise<void> {
         if (this.client) {
             await this.client.close();
@@ -207,9 +243,77 @@ async function main() {
         return;
     }
 
-    let linksMainNet: Data[] = []
-    let linksTestNet: Data[] = []
-    let linksDevNet: Data[] = []
+    let links: Link[];
+    try {
+        links = await Database.getInstance().getDatasByStatus();
+    } catch (error: any) {
+        console.log(`[X] getDatasByStatus error = ${error}`);
+        return;
+    }
+
+    let updatesStatusPendingMainnet = links
+        .filter((link: Link) => link.network === "mainnet" && link.status === "created")
+    let datasStatusPendingMainnet: Data[];
+    try {
+        datasStatusPendingMainnet = await Database.getInstance().convertLinksToDatas(updatesStatusPendingMainnet);
+    } catch (error: any) {
+        console.log(`[X] convertLinksToDatas error = ${error}`);
+        return;
+    }
+    let updatesStatusPendingMainnetPromises = datasStatusPendingMainnet.map((data: Data) => Database.getInstance().updateStatus(data, "pending", "0"));
+    await Promise.all(updatesStatusPendingMainnetPromises)
+        .then(() => console.log(`[X] updated ${updatesStatusPendingMainnetPromises.length} link from mainnet network from created to pending`))
+        .catch((error: any) => console.log(`[X] error updating ${updatesStatusPendingMainnetPromises.length} link from mainnet network from created to pending : error = ${error}`));
+
+
+
+    let updatesStatusPendingTestnet = links
+        .filter((link: Link) => link.network === "testnet" && link.status === "created")
+    let datasStatusPendingTestnet: Data[];
+    try {
+        datasStatusPendingTestnet = await Database.getInstance().convertLinksToDatas(updatesStatusPendingTestnet);
+    } catch (error: any) {
+        console.log(`[X] convertLinksToDatas error = ${error}`);
+        return;
+    }
+    let updatesStatusPendingTestnetPromises = datasStatusPendingTestnet.map((data: Data) => Database.getInstance().updateStatus(data, "pending", "0"));
+    await Promise.all(updatesStatusPendingTestnetPromises)
+        .then(() => console.log(`[X] updated ${updatesStatusPendingTestnetPromises.length} link from testnet network from created to pending`))
+        .catch((error: any) => console.log(`[X] error updating ${updatesStatusPendingTestnetPromises.length} link from testnet network from created to pending : error = ${error}`));
+
+
+    let updatesStatusPendingDevnet = links
+        .filter((link: Link) => link.network === "devnet" && link.status === "created")
+    let datasStatusPendingDevnet: Data[];
+    try {
+        datasStatusPendingDevnet = await Database.getInstance().convertLinksToDatas(updatesStatusPendingDevnet);
+    } catch (error: any) {
+        console.log(`[X] convertLinksToDatas error = ${error}`);
+        return;
+    }
+    let updatesStatusPendingDevnetPromises = datasStatusPendingDevnet.map((data: Data) => Database.getInstance().updateStatus(data, "pending", "0"));
+    await Promise.all(updatesStatusPendingDevnetPromises)
+        .then(() => console.log(`[X] updated ${updatesStatusPendingDevnetPromises.length} link from devnet network from created to pending`))
+        .catch((error: any) => console.log(`[X] error updating ${updatesStatusPendingDevnetPromises.length} link from devnet network from created to pending : error = ${error}`));
+
+        
+
+    let datasLink: Data[];
+    try {
+        datasLink = await Database.getInstance().convertLinksToDatas(links);
+    } catch (error: any) {
+        console.log(`[X] convertLinksToDatas error = ${error}`);
+        return;
+    }
+
+    let linksMainNet: Data[] = datasLink.filter((data: Data) => data.network === "mainnet");
+    let linksTestNet: Data[] = datasLink.filter((data: Data) => data.network === "testnet");
+    let linksDevNet: Data[] = datasLink.filter((data: Data) => data.network === "devnet");
+
+    
+    console.log(`[X] linksMainNet = ${linksMainNet.length}`);
+    console.log(`[X] linksTestNet = ${linksTestNet.length}`);
+    console.log(`[X] linksDevNet = ${linksDevNet.length}`);
 
     server(linksMainNet, linksTestNet, linksDevNet)
 
