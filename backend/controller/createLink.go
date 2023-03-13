@@ -18,7 +18,7 @@ type CreateLinkRequest struct {
 	Nickname       string  `json:"nickname"`
 	Recipient      string  `json:"recipient"`
 	Network        string  `json:"network"`
-	ExpectedAmount float32 `json:"expectedAmount"`
+	ExpectedAmount float64 `json:"expectedAmount"`
 }
 
 type CreateLinkResponse struct {

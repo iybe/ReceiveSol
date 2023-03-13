@@ -11,11 +11,11 @@ type registerLinkRequest struct {
 	Db_id     string  `json:"db_id"`
 	Reference string  `json:"reference"`
 	Recipient string  `json:"recipient"`
-	Amount    float32 `json:"amount"`
+	Amount    float64 `json:"amount"`
 	Network   string  `json:"network"`
 }
 
-func (c *Client) RegisterLink(db_id, reference, recipient, network string, amount float32) error {
+func (c *Client) RegisterLink(db_id, reference, recipient, network string, amount float64) error {
 	registerLinkReq := registerLinkRequest{
 		Db_id:     db_id,
 		Reference: reference,
