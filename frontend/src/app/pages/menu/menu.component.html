@@ -1,9 +1,9 @@
-<div class="home">
-  <div class="home-menu">
+<div class="receivesol">
+  <div class="receivesol-menu">
     <ul nz-menu nzMode="inline" nzTheme="dark">
       <!-- <li nz-menu-item nz-tooltip nzTooltipPlacement="right" nzSelected>
         <span nz-icon nzType="home"></span>
-        <span>Home</span>
+        <span>home</span>
       </li> -->
 
       <li
@@ -29,13 +29,13 @@
     </ul>
 
     <div
-      class="home-menu-footer"
+      class="receivesol-menu-footer"
       nz-popover
       nzPopoverTrigger="click"
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="right"
     >
-      <div class="home-menu-footer-user">
+      <div class="receivesol-menu-footer-user">
         <span nz-icon nzType="user" nzTheme="outline"></span>
         <p>{{ userName }}</p>
       </div>
@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <div class="conten">
+  <div class="receivesol-content">
     <app-account *ngIf="account"></app-account>
     <app-payment-links *ngIf="paymantLinks"></app-payment-links>
   </div>
