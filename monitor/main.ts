@@ -4,9 +4,8 @@ import { findReference, FindReferenceError } from './solana_pay/findReference'
 import BigNumber from 'bignumber.js';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import express from 'express';
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient, ObjectId, Timestamp } from 'mongodb';
 import dotenv from 'dotenv';
-import { ValidateTransferError } from '@solana/pay';
 import { calcAmountPayment } from './solana_pay/calcAmount';
 
 const KEY_TESTNET_DATA = "KEY_TESTNET_DATA"
@@ -48,12 +47,15 @@ interface Link {
     amountReceived: number;
 }
 
+function nowFormated() {
+    const now = new Date();
+    const dateTimeString = now.toISOString().replace("T", " ").replace("Z", "");
+    return dateTimeString;
+}
+
 async function checker(array: Data[], connection: Connection, keyArray: string, keyArrayValidate: string) {
     const interval = setInterval(async () => {
-        const now = new Date();
-        const dateTimeString = now.toISOString().replace("T", " ").replace("Z", "");
-
-        console.log(`${dateTimeString} : checker : ${keyArray} : ${array.length} links ativos`);
+        console.log(`${nowFormated()} : checker : ${keyArray} : ${array.length} links ativos`);
         let newArray = await sharedArray.copySharedArray(keyArray, array);
         let validateTransactions: Data[] = []
 
@@ -67,7 +69,7 @@ async function checker(array: Data[], connection: Connection, keyArray: string, 
                 console.log(`[x] checker : statusTransaction = ${JSON.stringify(statusTransaction)}`);
 
                 if (statusTransaction.status === "received_total" || statusTransaction.status === "received_incomplete") {
-                    await Database.getInstance().updateStatus(element, statusTransaction.status, statusTransaction.amount.toString());
+                    await Database.getInstance().updateStatusReceived(element, statusTransaction.status, statusTransaction.amount.toString());
                     await sharedArray.addToSharedArray(keyArrayValidate, validateTransactions, element)
                 }
             } catch (error) {
@@ -145,9 +147,25 @@ class Database {
 
     public async updateStatus(data: Data, status: string, amount: string): Promise<void> {
         try {
+            const now = new Date();
             const amountNumber = Number(amount);
             const query = { _id: new ObjectId(data.db_id) };
             const update = { $set: { status: status, amountReceived: amountNumber } };
+
+            await this.collection.updateOne(query, update);
+
+            console.log(`[X] updateStatus : document ${data.db_id} updated`);
+        } catch (error: any) {
+            console.log(`[X] updateStatus : error = ${error} : data = ${JSON.stringify(data)} : status = ${status}`);
+        }
+    }
+
+    public async updateStatusReceived(data: Data, status: string, amount: string): Promise<void> {
+        try {
+            const now = new Date();
+            const amountNumber = Number(amount);
+            const query = { _id: new ObjectId(data.db_id) };
+            const update = { $set: { status: status, amountReceived: amountNumber, receivedAt: nowFormated() } };
 
             await this.collection.updateOne(query, update);
 
