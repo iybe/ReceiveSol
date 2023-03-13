@@ -7,6 +7,7 @@ import express from 'express';
 import { MongoClient, ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
 import { ValidateTransferError } from '@solana/pay';
+import { calcAmountPayment } from './solana_pay/calcAmount';
 
 const KEY_TESTNET_DATA = "KEY_TESTNET_DATA"
 const KEY_TESTNET_DATA_VALIDATE = "KEY_TESTNET_DATA_VALIDATE"
@@ -29,6 +30,7 @@ interface Err {
 
 interface StatusCheckTransaction {
     status: string
+    amount: string
 }
 
 async function checker(array: Data[], connection: Connection, keyArray: string, keyArrayValidate: string) {
@@ -50,7 +52,7 @@ async function checker(array: Data[], connection: Connection, keyArray: string, 
                 console.log(`[x] checker : statusTransaction = ${JSON.stringify(statusTransaction)}`);
 
                 if (statusTransaction.status === "received_total" || statusTransaction.status === "received_incomplete") {
-                    await Database.getInstance().updateStatus(element, statusTransaction.status);
+                    await Database.getInstance().updateStatus(element, statusTransaction.status, statusTransaction.amount.toString());
                     await sharedArray.addToSharedArray(keyArrayValidate, validateTransactions, element)
                 }
             } catch (error) {
@@ -73,28 +75,28 @@ async function checkTransaction(connection: Connection, reference: PublicKey, am
         let signatureInfo = await findReference(connection, reference, { finality: 'confirmed' });
         console.log(`[x] checkTransaction : signature found : reference = ${reference.toString()} : signature = ${signatureInfo.signature}`);
         try {
-            let transactionResponse = await validateTransfer(connection, signatureInfo.signature, { recipient: recipient, amount });
-            console.log(transactionResponse)
+            await validateTransfer(connection, signatureInfo.signature, { recipient: recipient, amount });
             console.log(`[x] checkTransaction : payment validate : reference = ${reference.toString()}`);
-            let status: StatusCheckTransaction = { status: "received_total" }
+            let status: StatusCheckTransaction = { status: "received_total", amount: amount.toString() }
             return status
         } catch (error: any) {
-            if (error.message === "amount not transferred") {
+            if (error.name === "ValidateTransferError" && error.message === "amount not transferred") {
                 console.log(`[x] checkTransaction : amount not transferred : reference = ${reference.toString()} : error = ${error}`);
-                let status: StatusCheckTransaction = { status: "received_incomplete" }
+                let amountCalculation = await calcAmountPayment(connection, signatureInfo.signature, { recipient: recipient, amount });
+                let status: StatusCheckTransaction = { status: "received_incomplete", amount: amountCalculation }
                 return status
             }
             console.log(`[x] checkTransaction : payment validate failed : reference = ${reference.toString()} : error = ${error}`);
-            let status: StatusCheckTransaction = { status: "failed" }
+            let status: StatusCheckTransaction = { status: "failed", amount: "0" }
             return status
         }
     } catch (error: any) {
         if (!(error instanceof FindReferenceError)) {
             console.log(`[x] checkTransaction : error = ${error}`);
-            let status: StatusCheckTransaction = { status: "error" }
+            let status: StatusCheckTransaction = { status: "error", amount: "0" }
             return status
         }
-        let status: StatusCheckTransaction = { status: "not-found" }
+        let status: StatusCheckTransaction = { status: "not-found", amount: "0" }
         return status
     }
 }
@@ -126,10 +128,11 @@ class Database {
         }
     }
 
-    public async updateStatus(data: Data, status: string): Promise<void> {
+    public async updateStatus(data: Data, status: string, amount: string): Promise<void> {
         try {
+            const amountNumber = Number(amount);
             const query = { _id: new ObjectId(data.db_id) };
-            const update = { $set: { status: status, amountReceived: data.amount } };
+            const update = { $set: { status: status, amountReceived: amountNumber } };
 
             await this.collection.updateOne(query, update);
 

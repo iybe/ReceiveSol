@@ -98,7 +98,7 @@ function validateMemo(instruction: TransactionInstruction, memo: string): void {
     if (!instruction.data.equals(Buffer.from(memo, 'utf8'))) throw new ValidateTransferError('invalid memo');
 }
 
-async function validateSystemTransfer(
+export async function validateSystemTransfer(
     instruction: TransactionInstruction,
     message: Message,
     meta: ConfirmedTransactionMeta,
