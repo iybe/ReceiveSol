@@ -53,7 +53,7 @@ func (c *Controller) CreateLink(ctx *gin.Context) {
 		return
 	}
 
-	account, err := c.Database.GetAccountByPublicKey(newLink.Recipient)
+	account, err := c.Database.GetAccount(newLink.Recipient, newLink.UserId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

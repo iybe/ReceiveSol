@@ -36,7 +36,7 @@ func (c *Controller) RegisterAccount(ctx *gin.Context) {
 		return
 	}
 
-	searchedPublicKey, err := c.Database.GetAccountByPublicKey(registerAccountReq.PublicKey)
+	searchedPublicKey, err := c.Database.GetAccount(registerAccountReq.PublicKey, registerAccountReq.UserId)
 	if searchedPublicKey != nil {
 		ctx.JSON(http.StatusConflict, gin.H{"error": "publicKey already exists"})
 		return
