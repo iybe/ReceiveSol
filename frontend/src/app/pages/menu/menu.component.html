@@ -1,0 +1,55 @@
+<div class="home">
+  <div class="home-menu">
+    <ul nz-menu nzMode="inline" nzTheme="dark">
+      <!-- <li nz-menu-item nz-tooltip nzTooltipPlacement="right" nzSelected>
+        <span nz-icon nzType="home"></span>
+        <span>Home</span>
+      </li> -->
+
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzTooltipPlacement="right"
+        nzSelected
+        (click)="changePage('Account')"
+      >
+        <span nz-icon nzType="wallet"></span>
+        <span>Account</span>
+      </li>
+
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzTooltipPlacement="right"
+        (click)="changePage('paymantLinks')"
+      >
+        <span nz-icon nzType="link"></span>
+        <span>Payment links</span>
+      </li>
+    </ul>
+
+    <div
+      class="home-menu-footer"
+      nz-popover
+      nzPopoverTrigger="click"
+      [nzPopoverContent]="contentTemplate"
+      nzPopoverPlacement="right"
+    >
+      <div class="home-menu-footer-user">
+        <span nz-icon nzType="user" nzTheme="outline"></span>
+        <p>{{ userName }}</p>
+      </div>
+
+      <ng-template #contentTemplate>
+        <a (click)="singOut()"
+          ><span nz-icon nzType="logout" nzTheme="outline"></span> Sing out</a
+        >
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="conten">
+    <app-account *ngIf="account"></app-account>
+    <app-payment-links *ngIf="paymantLinks"></app-payment-links>
+  </div>
+</div>
