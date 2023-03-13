@@ -34,10 +34,10 @@ func (c *ClientMongoDB) AddAccount(account Account) (*Account, error) {
 	return newAccount, nil
 }
 
-func (c *ClientMongoDB) GetAccountByPublicKey(publicKey string) (*Account, error) {
+func (c *ClientMongoDB) GetAccount(publicKey, userId string) (*Account, error) {
 	collection := c.Client.Database(c.DatabaseName).Collection(c.CollectionAccount)
 	var newAccount Account
-	err := collection.FindOne(context.Background(), bson.M{"publicKey": publicKey}).Decode(&newAccount)
+	err := collection.FindOne(context.Background(), bson.M{"publicKey": publicKey, "userId": userId}).Decode(&newAccount)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, nil
