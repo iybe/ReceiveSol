@@ -27,6 +27,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl(),
   });
 
+  public clearLocalStorage() {
+    localStorage.clear();
+  }
+
   public newRegister() {
     this.router.navigate(['/register']);
   }
@@ -45,7 +49,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('id', response.id);
 
         this.notify.success('Success', 'Login success');
-        // this.router.navigate(['/home']);
+        this.router.navigate(['/Receivesol']);
         this.loadingButton = false;
       },
       ({ error }) => {
@@ -55,5 +59,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.clearLocalStorage();
+  }
 }

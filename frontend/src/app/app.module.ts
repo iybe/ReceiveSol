@@ -12,6 +12,10 @@ import { AppComponent } from './app.component';
 
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { MenuComponent } from './pages/menu/menu.component';
+import { PaymentLinksComponent } from './pages/payment-links/payment-links.component';
+import { AccountComponent } from './pages/account/account.component';
+import { NewAccountComponent } from './modals/new-account/new-account.component';
 
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
@@ -24,11 +28,22 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    MenuComponent,
+    PaymentLinksComponent,
+    AccountComponent,
+    NewAccountComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -45,6 +60,9 @@ registerLocaleData(en);
     NzIconModule,
     NzNotificationModule,
     NzTableModule,
+    NzPopoverModule,
+    NzDividerModule,
+    NzModalModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],

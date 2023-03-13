@@ -1,0 +1,33 @@
+<div class="accounts">
+  <nz-divider nzOrientation="left" nzText="Account"></nz-divider>
+
+  <div class="accounts-top">
+    <button nz-button nzType="primary" (click)="newAccount()">
+      <span nz-icon nzType="plus"></span>
+      New Account
+    </button>
+  </div>
+
+  <div class="accounts-table">
+    <nz-table #basicTable [nzData]="accounts">
+      <thead>
+        <tr>
+          <th>Nickname</th>
+          <th>Public KEY</th>
+          <!-- <th></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accounts">
+          <td>{{ account.Nickname }}</td>
+          <td>{{ account.PublicKey }}</td>
+          <!-- <td>
+            <button nz-button nzType="text">
+              <span nz-icon nzType="delete" nzTheme="fill"></span>
+            </button>
+          </td> -->
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
