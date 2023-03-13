@@ -79,6 +79,8 @@ func main() {
 
 	router := gin.Default()
 
+	router.Use(middleware.CORSMiddleware())
+
 	router.POST("/user", controllerClient.CreateUser)
 	router.POST("/user/login", controllerClient.LoginUser)
 

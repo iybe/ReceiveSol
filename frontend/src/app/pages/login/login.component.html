@@ -1,0 +1,55 @@
+<div class="login-page">
+  <div class="login-page-form">
+    <form [formGroup]="loginForm">
+      <div class="login-page-form-user-input">
+        <nz-input-group [nzPrefix]="prefixTemplateUser">
+          <input
+            formControlName="username"
+            type="text"
+            nz-input
+            placeholder="Enter your username"
+            required="required"
+          />
+        </nz-input-group>
+
+        <ng-template #prefixTemplateUser
+          ><span nz-icon nzType="user"></span
+        ></ng-template>
+      </div>
+
+      <div class="login-page-form-password-input">
+        <nz-input-group [nzSuffix]="suffixTemplate">
+          <input
+            formControlName="password"
+            [type]="passwordVisible ? 'text' : 'password'"
+            nz-input
+            placeholder="Enter your password"
+            required="required"
+          />
+        </nz-input-group>
+
+        <ng-template #suffixTemplate>
+          <span
+            nz-icon
+            [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+            (click)="passwordVisible = !passwordVisible"
+          ></span>
+        </ng-template>
+      </div>
+    </form>
+  </div>
+
+  <div class="login-page-footer">
+    <button nz-button nzType="default" (click)="newRegister()">Sing up</button>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="login()"
+      [disabled]="!loginForm.valid"
+      [nzLoading]="loadingButton"
+    >
+      Sing in
+    </button>
+  </div>
+</div>
