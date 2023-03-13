@@ -17,9 +17,11 @@ type Link struct {
 	Reference      string     `bson:"reference,omitempty"`
 	Recipient      string     `bson:"recipient,omitempty"`
 	Network        string     `bson:"network,omitempty"`
-	ExpectedAmount float32    `bson:"expectedAmount,omitempty"`
+	ExpectedAmount float64    `bson:"expectedAmount,omitempty"`
+	AmountReceived float64    `bson:"amountReceived,omitempty"`
 	Status         string     `bson:"status,omitempty"`
 	CreatedAt      *time.Time `bson:"createdAt,omitempty"`
+	ReceivedAt     string     `bson:"receivedAt,omitempty"`
 }
 
 func (c *ClientMongoDB) CreateLink(link Link) (*Link, error) {

@@ -3,8 +3,9 @@ package service
 import (
 	"crypto/rand"
 	"crypto/rsa"
-	"github.com/btcsuite/btcutil/base58"
 	"fmt"
+
+	"github.com/btcsuite/btcutil/base58"
 )
 
 func GenerateRandomPublicKey() (string, error) {
@@ -19,7 +20,7 @@ func GenerateRandomPublicKey() (string, error) {
 	return publicKeyBase58, nil
 }
 
-func CreateSolanaPayLink(recipient, reference string, amount float32) string {
+func CreateSolanaPayLink(recipient, reference string, amount float64) string {
 	amountS := fmt.Sprintf("%.2f", amount)
 	return fmt.Sprintf("solana:%s?amount=%s&reference=%s", recipient, amountS, reference)
 }
