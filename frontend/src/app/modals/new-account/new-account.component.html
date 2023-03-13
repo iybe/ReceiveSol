@@ -1,1 +1,31 @@
-Componente aqui
+<div class="create-account">
+  <div class="create-account-form">
+    <form [formGroup]="newAccountForm">
+      <input
+        formControlName="nickname"
+        type="text"
+        nz-input
+        placeholder="Enter a nickname"
+        required="required"
+      />
+
+      <input
+        formControlName="publicKey"
+        nz-input
+        placeholder="Enter a public key"
+        required="required"
+      />
+    </form>
+  </div>
+  <div class="create-account-footer">
+    <a nz-button nzType="link" (click)="closeModal()">Cancel</a>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createAccount()"
+      [disabled]="!newAccountForm.valid"
+    >
+      Create
+    </button>
+  </div>
+</div>

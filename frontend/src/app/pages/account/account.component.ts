@@ -19,16 +19,10 @@ export class AccountComponent implements OnInit {
     private modal: NzModalService
   ) {}
 
-  public userInfo = {
-    id: localStorage.getItem('id')!,
-    token: localStorage.getItem('token')!,
-  };
-
   public accounts!: FunctionsServiceInterface.Receive.listAccount[];
 
   public listAccount() {
-    console.log(this.userInfo);
-    this.functionsService.listAccount(this.userInfo).subscribe(
+    this.functionsService.listAccount().subscribe(
       (response) => {
         this.accounts = response;
       },
@@ -39,13 +33,16 @@ export class AccountComponent implements OnInit {
   }
 
   public newAccount() {
-    console.log('new account');
-    this.modal.create({
-      nzTitle: 'New Account',
-      nzContent: NewAccountComponent,
-      nzFooter: null,
-      nzWidth: '50%',
-    });
+    this.modal
+      .create({
+        nzTitle: 'New Account',
+        nzContent: NewAccountComponent,
+        nzFooter: null,
+        nzWidth: '50%',
+      })
+      .afterClose.subscribe(() => {
+        this.listAccount();
+      });
   }
 
   ngOnInit(): void {

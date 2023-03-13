@@ -14,18 +14,18 @@
         <tr>
           <th>Nickname</th>
           <th>Public KEY</th>
-          <th></th>
+          <!-- <th></th> -->
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let account of accounts">
           <td>{{ account.Nickname }}</td>
           <td>{{ account.PublicKey }}</td>
-          <td>
+          <!-- <td>
             <button nz-button nzType="text">
               <span nz-icon nzType="delete" nzTheme="fill"></span>
             </button>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </nz-table>

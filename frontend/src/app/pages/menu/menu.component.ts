@@ -15,8 +15,6 @@ export class MenuComponent implements OnInit {
   public paymantLinks = false;
 
   public changePage(page: string) {
-    console.log(page);
-
     if (page === 'Account') {
       this.account = true;
       this.paymantLinks = false;
