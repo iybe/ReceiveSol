@@ -40,8 +40,7 @@ func (c *Client) RegisterLink(db_id, reference, recipient, network string, amoun
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("authorization", c.Authorization)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		c.Log.Error(methodRegisterLink, err)
 		return err

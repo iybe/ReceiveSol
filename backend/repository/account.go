@@ -9,7 +9,7 @@ import (
 )
 
 type Account struct {
-	ID        string `bson:"_id, omitempty"`
+	ID        string `bson:"_id,omitempty"`
 	PublicKey string `bson:"publicKey"`
 	UserId    string `bson:"userId"`
 	Nickname  string `bson:"nickname"`
