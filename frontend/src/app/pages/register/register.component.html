@@ -1,7 +1,8 @@
-<div class="login-page">
-  <div class="login-page-form">
-    <form [formGroup]="loginForm">
-      <div class="login-page-form-user-input">
+<div class="register-page">
+  <div class="register-page-salutation"></div>
+  <div class="register-page-form">
+    <form [formGroup]="registerForm">
+      <div class="register-page-form-user-input">
         <nz-input-group [nzPrefix]="prefixTemplateUser">
           <input
             formControlName="username"
@@ -16,7 +17,7 @@
         ></ng-template>
       </div>
 
-      <div class="login-page-form-password-input">
+      <div class="register-page-form-password-input">
         <nz-input-group [nzSuffix]="suffixTemplate">
           <input
             formControlName="password"
@@ -34,19 +35,36 @@
           ></span>
         </ng-template>
       </div>
+
+      <div class="register-page-form-password-confirm-input">
+        <nz-input-group [nzSuffix]="suffixTemplate">
+          <input
+            formControlName="passwordConfirm"
+            [type]="passwordVisible ? 'text' : 'password'"
+            nz-input
+            placeholder="Enter your password again"
+          />
+        </nz-input-group>
+
+        <ng-template #suffixTemplate>
+          <span
+            nz-icon
+            [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+            (click)="passwordVisible = !passwordVisible"
+          ></span>
+        </ng-template>
+      </div>
     </form>
   </div>
-
-  <div class="login-page-footer">
-    <button nz-button nzType="default" (click)="newRegister()">Sing up</button>
-
+  <div class="register-page-footer">
+    <a nz-button nzType="link" (click)="backToLogin()">Back</a>
     <button
       nz-button
       nzType="primary"
-      (click)="login()"
       [nzLoading]="loadingButton"
+      (click)="registerUser()"
     >
-      Sing in
+      Done
     </button>
   </div>
 </div>
