@@ -9,6 +9,7 @@
             type="text"
             nz-input
             placeholder="Enter your username"
+            required="required"
           />
         </nz-input-group>
 
@@ -24,6 +25,8 @@
             [type]="passwordVisible ? 'text' : 'password'"
             nz-input
             placeholder="Enter your password"
+            required="required"
+            (keyup)="passwordsMatch()"
           />
         </nz-input-group>
 
@@ -37,20 +40,22 @@
       </div>
 
       <div class="register-page-form-password-confirm-input">
-        <nz-input-group [nzSuffix]="suffixTemplate">
+        <nz-input-group [nzSuffix]="suffixTemplate2">
           <input
             formControlName="passwordConfirm"
-            [type]="passwordVisible ? 'text' : 'password'"
+            [type]="passwordConfirmVisible ? 'text' : 'password'"
             nz-input
             placeholder="Enter your password again"
+            required="required"
+            (keyup)="passwordsMatch()"
           />
         </nz-input-group>
 
-        <ng-template #suffixTemplate>
+        <ng-template #suffixTemplate2>
           <span
             nz-icon
-            [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
-            (click)="passwordVisible = !passwordVisible"
+            [nzType]="passwordConfirmVisible ? 'eye-invisible' : 'eye'"
+            (click)="passwordConfirmVisible = !passwordConfirmVisible"
           ></span>
         </ng-template>
       </div>
@@ -63,6 +68,7 @@
       nzType="primary"
       [nzLoading]="loadingButton"
       (click)="registerUser()"
+      [disabled]="!registerForm.valid || passwordsMatch()"
     >
       Done
     </button>

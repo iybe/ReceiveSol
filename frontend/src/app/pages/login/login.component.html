@@ -8,6 +8,7 @@
             type="text"
             nz-input
             placeholder="Enter your username"
+            required="required"
           />
         </nz-input-group>
 
@@ -23,6 +24,7 @@
             [type]="passwordVisible ? 'text' : 'password'"
             nz-input
             placeholder="Enter your password"
+            required="required"
           />
         </nz-input-group>
 
@@ -44,6 +46,7 @@
       nz-button
       nzType="primary"
       (click)="login()"
+      [disabled]="!loginForm.valid"
       [nzLoading]="loadingButton"
     >
       Sing in
