@@ -26,6 +26,16 @@
         <span nz-icon nzType="link"></span>
         <span>Payment links</span>
       </li>
+
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzTooltipPlacement="right"
+        (click)="changePage('permalinks')"
+      >
+        <span nz-icon nzType="pushpin" nzTheme="outline"></span>
+        <span>Permalink</span>
+      </li>
     </ul>
 
     <div
@@ -51,5 +61,6 @@
   <div class="receivesol-content">
     <app-account *ngIf="account"></app-account>
     <app-payment-links *ngIf="paymantLinks"></app-payment-links>
+    <app-options-permalink *ngIf="permalinks"></app-options-permalink>
   </div>
 </div>

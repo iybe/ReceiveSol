@@ -37,6 +37,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { OptionsPermalinkComponent } from './pages/options-permalink/options-permalink.component';
 
 registerLocaleData(en);
 
@@ -51,6 +52,7 @@ registerLocaleData(en);
     NewAccountComponent,
     NewPaymentLinksComponent,
     CreatePermalinkComponent,
+    OptionsPermalinkComponent,
   ],
   imports: [
     BrowserModule,
