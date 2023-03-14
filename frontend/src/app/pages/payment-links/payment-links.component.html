@@ -30,7 +30,7 @@
             <td>{{ link.ExpectedAmount }}</td>
             <td>{{ link.Status }}</td>
             <td>
-              <button nz-button nzType="text">
+              <button nz-button nzType="text" (click)="generateQRCode(link)">
                 <span nz-icon nzType="qrcode" nzTheme="outline"></span>
               </button>
             </td>

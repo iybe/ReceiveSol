@@ -1,11 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { Component, OnInit, TemplateRef, Type } from '@angular/core';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NewPaymentLinksComponent } from 'src/app/modals/new-payment-link/new-payment-link.component';
+import { QrcodeLinkComponent } from 'src/app/modals/qrcode-link/qrcode-link.component';
 import {
   FunctionsService,
   FunctionsServiceInterface,
 } from 'src/app/services/functions.service';
+
+interface InfosLink {
+  ID: string;
+  Nickname: string;
+  UserId: string;
+  AccountId: string;
+  Link: string;
+  Reference: string;
+  Recipient: string;
+  Network: string;
+  ExpectedAmount: number;
+  AmountReceived: number;
+  Status: string;
+  CreatedAt: string;
+  ReceivedAt: string;
+}
 
 @Component({
   selector: 'app-payment-links',
@@ -20,6 +37,9 @@ export class PaymentLinksComponent implements OnInit {
   ) {}
 
   public links!: FunctionsServiceInterface.Receive.listLink[];
+
+  public infosLink!: InfosLink;
+  private modalQrCode!: NzModalRef;
 
   public listLink() {
     this.functionsService.listLink().subscribe(
@@ -47,6 +67,28 @@ export class PaymentLinksComponent implements OnInit {
       .afterClose.subscribe(() => {
         this.listLink();
       });
+  }
+
+  private openModal(
+    nzContent: string | TemplateRef<{}> | Type<unknown> | undefined,
+    infosLink?: InfosLink
+  ): void {
+    this.modalQrCode = this.modal.create({
+      nzContent,
+      nzFooter: null,
+      nzWidth: '43.188rem',
+      nzMaskClosable: false,
+      nzBodyStyle: {
+        padding: '40px 60px',
+      },
+      nzComponentParams: {
+        infosLink,
+      },
+    });
+  }
+
+  public generateQRCode(link: FunctionsServiceInterface.Receive.listLink) {
+    this.openModal(QrcodeLinkComponent, link);
   }
 
   ngOnInit(): void {
