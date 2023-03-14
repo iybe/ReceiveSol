@@ -50,9 +50,14 @@
       nz-button
       nzType="primary"
       (click)="createPaymentLink()"
-      [disabled]="!newPaymentLinkForm.valid"
+      [disabled]="!newPaymentLinkForm.valid || showQrCode"
     >
       Create
     </button>
+  </div>
+
+  <div class="create-payment-link-qrcode">
+    <div id="qrCode"></div>
+    <p>{{ linkQrCode }}</p>
   </div>
 </div>

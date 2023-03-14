@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+
+import * as qrcode from 'qrcode-generator';
+
 import {
   FunctionsService,
   FunctionsServiceInterface,
@@ -20,8 +24,11 @@ export class NewPaymentLinksComponent implements OnInit {
   ) {}
 
   public accounts!: FunctionsServiceInterface.Receive.listAccount[];
+  public linkQrCode!: string;
 
   public networks = ['testnet', 'devnet', 'mainnet'];
+
+  public showQrCode = false;
 
   public newPaymentLinkForm = new FormGroup({
     nickname: new FormControl(),
@@ -45,6 +52,15 @@ export class NewPaymentLinksComponent implements OnInit {
     this.modal.closeAll();
   }
 
+  public generateQRCode(text: string): void {
+    this.linkQrCode = text;
+    const qr = qrcode(0, 'Q');
+    qr.addData(text);
+    qr.make();
+    const qrCode = document.getElementById('qrCode');
+    qrCode!.innerHTML = qr.createImgTag(4, 0);
+  }
+
   public createPaymentLink() {
     const payload = {
       userId: localStorage.getItem('id')!,
@@ -57,7 +73,8 @@ export class NewPaymentLinksComponent implements OnInit {
     this.functionsService.createLink(payload).subscribe(
       (response) => {
         this.notify.success('Success', 'Account created');
-        this.closeModal();
+        this.showQrCode = true;
+        this.generateQRCode(response.link);
       },
       ({ error }) => {
         this.notify.error('Error', error.error);
