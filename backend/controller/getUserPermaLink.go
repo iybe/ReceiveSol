@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 type GetUserPermaLinkResponse struct {
 	RecipientPermaLink string `json:"recipientPermaLink"`
 	NetworkPermaLink   string `json:"networkPermaLink"`
+	Url                string `json:"url"`
 }
 
 func (c *Controller) GetUserPermaLink(ctx *gin.Context) {
@@ -36,6 +38,7 @@ func (c *Controller) GetUserPermaLink(ctx *gin.Context) {
 	getUserPermaLinkResponse := GetUserPermaLinkResponse{
 		RecipientPermaLink: user.RecipientPermaLink,
 		NetworkPermaLink:   user.NetworkPermaLink,
+		Url:                fmt.Sprintf("%s/permalink", c.Url),
 	}
 
 	ctx.JSON(http.StatusOK, getUserPermaLinkResponse)

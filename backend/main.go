@@ -35,6 +35,7 @@ func main() {
 	EXTERNAL_MONITOR_URL := os.Getenv("EXTERNAL_MONITOR_URL")
 	EXTERNAL_MONITOR_HOSTNAME := os.Getenv("EXTERNAL_MONITOR_HOSTNAME")
 	EXTERNAL_MONITOR_AUTHORIZATION := os.Getenv("EXTERNAL_MONITOR_AUTHORIZATION")
+	URL := os.Getenv("URL")
 
 	client, err := repository.CreateClient(MONGODB_URI)
 	if err != nil {
@@ -72,6 +73,7 @@ func main() {
 	}
 
 	controllerClient := controller.Controller{
+		Url:             URL,
 		Database:        &mongoClient,
 		SSOExternal:     &ssoClient,
 		MonitorExternal: &monitorClient,

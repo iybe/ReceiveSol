@@ -86,7 +86,12 @@ func (c *ClientMongoDB) ListLink(userId string, status string, network string, r
 	collection := c.Client.Database(c.DatabaseName).Collection(c.CollectionLink)
 
 	var links []Link
-	filter := bson.M{"userId": userId, "isPermaLink": permalink}
+	filter := bson.M{"userId": userId}
+	if permalink {
+		filter["isPermaLink"] = true
+	} else {
+		filter["isPermaLink"] = bson.M{"$ne": true}
+	}
 	if status != "" {
 		filter["status"] = status
 	}
