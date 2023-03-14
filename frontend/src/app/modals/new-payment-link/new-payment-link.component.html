@@ -1,4 +1,4 @@
-<div class="create-payment-link">
+<div *ngIf="!showQrCode" class="create-payment-link">
   <div class="create-payment-link-form">
     <form [formGroup]="newPaymentLinkForm">
       <input
@@ -55,9 +55,18 @@
       Create
     </button>
   </div>
+</div>
 
-  <div class="create-payment-link-qrcode">
-    <div id="qrCode"></div>
-    <p>{{ linkQrCode }}</p>
+<div *ngIf="showQrCode" class="create-payment-link-qrcode">
+  <div class="create-payment-link-qrcode-content">
+    <div id="qrCode" class="create-payment-link-qrcode-content-img"></div>
+  </div>
+
+  <div class="create-payment-link-qrcode-infos">
+    <p><b>Link:</b> {{ linkQrCode }}</p>
+  </div>
+
+  <div class="create-payment-link-qrcode-footer">
+    <a nz-button nzType="link" (click)="backPage()">Back</a>
   </div>
 </div>

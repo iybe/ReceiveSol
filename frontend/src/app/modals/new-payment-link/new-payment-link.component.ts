@@ -62,6 +62,8 @@ export class NewPaymentLinksComponent implements OnInit {
   }
 
   public createPaymentLink() {
+    this.showQrCode = true;
+
     const payload = {
       userId: localStorage.getItem('id')!,
       nickname: this.newPaymentLinkForm.value.nickname,
@@ -80,6 +82,10 @@ export class NewPaymentLinksComponent implements OnInit {
         this.notify.error('Error', error.error);
       }
     );
+  }
+
+  public backPage() {
+    this.showQrCode = false;
   }
 
   ngOnInit(): void {
