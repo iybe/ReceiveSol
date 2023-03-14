@@ -29,7 +29,5 @@ export async function calcAmountPayment(
     const instruction = instructions.pop();
     if (!instruction) throw new ValidateTransferError('missing transfer instruction');
     const [preAmount, postAmount] = await validateSystemTransfer(instruction, message, meta, recipient, reference);
-    console.log('preAmount', preAmount.toString());
-    console.log('postAmount', postAmount.toString());
     return calcAmount(preAmount, postAmount);
 }
