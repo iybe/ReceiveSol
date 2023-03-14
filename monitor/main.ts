@@ -20,7 +20,9 @@ interface Data {
     reference: string;
     recipient: string;
     amount: number;
-    network: string
+    network: string;
+    expiration: number;
+    createdAt: Date;
 }
 
 interface Err {
@@ -45,6 +47,8 @@ interface Link {
     status: string;
     createdAt: Date;
     amountReceived: number;
+    expiration: number;
+    expired: boolean;
 }
 
 function nowFormated() {
@@ -64,6 +68,22 @@ async function checker(array: Data[], connection: Connection, keyArray: string, 
                 const recipient = new PublicKey(element.recipient);
                 const amount = new BigNumber(element.amount);
                 const reference = new PublicKey(element.reference);
+                const expiration = element.expiration;
+                const createdAt = element.createdAt;
+
+                if (expiration > 0) {
+                    const dateNow = new Date();
+                    const dateCreated = new Date(createdAt);
+                    console.log(dateCreated, createdAt)
+                    const diffInMs = Math.abs(dateNow.getTime() - dateCreated.getTime());
+                    const diffInMinutes = Math.floor(diffInMs / 60000);
+                    console.log(diffInMinutes)
+                    if (diffInMinutes >= expiration) {
+                        await Database.getInstance().updateStatusExpired(element);
+                        await sharedArray.addToSharedArray(keyArrayValidate, validateTransactions, element)
+                        return;
+                    }
+                }
 
                 let statusTransaction = await checkTransaction(connection, reference, amount, recipient)
                 console.log(`[x] checker : statusTransaction = ${JSON.stringify(statusTransaction)}`);
@@ -147,7 +167,6 @@ class Database {
 
     public async updateStatus(data: Data, status: string, amount: string): Promise<void> {
         try {
-            const now = new Date();
             const amountNumber = Number(amount);
             const query = { _id: new ObjectId(data.db_id) };
             const update = { $set: { status: status, amountReceived: amountNumber } };
@@ -160,9 +179,21 @@ class Database {
         }
     }
 
-    public async updateStatusReceived(data: Data, status: string, amount: string): Promise<void> {
+    public async updateStatusExpired(data: Data): Promise<void> {
         try {
             const now = new Date();
+            const query = { _id: new ObjectId(data.db_id) };
+            const update = { $set: { status: "expired", expired: true } };
+            await this.collection.updateOne(query, update);
+            console.log(`[X] updateStatusExpired : document ${data.db_id} updated : expired = true`);
+        } catch (error: any) {
+            console.log(`[X] updateStatusExpired : error = ${error} : _id = ${data.db_id}`);
+        }
+    }
+
+
+    public async updateStatusReceived(data: Data, status: string, amount: string): Promise<void> {
+        try {
             const amountNumber = Number(amount);
             const query = { _id: new ObjectId(data.db_id) };
             const update = { $set: { status: status, amountReceived: amountNumber, receivedAt: nowFormated() } };
@@ -191,7 +222,9 @@ class Database {
             reference: link.reference,
             recipient: link.recipient,
             amount: link.expectedAmount,
-            network: link.network
+            network: link.network,
+            expiration: link.expiration,
+            createdAt: link.createdAt,
         }));
         return data;
     }
@@ -314,7 +347,7 @@ async function main() {
         .then(() => console.log(`[X] updated ${updatesStatusPendingDevnetPromises.length} link from devnet network from created to pending`))
         .catch((error: any) => console.log(`[X] error updating ${updatesStatusPendingDevnetPromises.length} link from devnet network from created to pending : error = ${error}`));
 
-        
+
 
     let datasLink: Data[];
     try {
@@ -328,7 +361,7 @@ async function main() {
     let linksTestNet: Data[] = datasLink.filter((data: Data) => data.network === "testnet");
     let linksDevNet: Data[] = datasLink.filter((data: Data) => data.network === "devnet");
 
-    
+
     console.log(`[X] linksMainNet = ${linksMainNet.length}`);
     console.log(`[X] linksTestNet = ${linksTestNet.length}`);
     console.log(`[X] linksDevNet = ${linksDevNet.length}`);

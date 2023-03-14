@@ -22,6 +22,8 @@ type Link struct {
 	Status         string     `bson:"status,omitempty"`
 	CreatedAt      *time.Time `bson:"createdAt,omitempty"`
 	ReceivedAt     string     `bson:"receivedAt,omitempty"`
+	Expiration     int64      `bson:"expiration,omitempty"`
+	Expired        bool       `bson:"expired,omitempty"`
 }
 
 func (c *ClientMongoDB) CreateLink(link Link) (*Link, error) {

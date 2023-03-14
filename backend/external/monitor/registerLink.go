@@ -5,23 +5,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type registerLinkRequest struct {
-	Db_id     string  `json:"db_id"`
-	Reference string  `json:"reference"`
-	Recipient string  `json:"recipient"`
-	Amount    float64 `json:"amount"`
-	Network   string  `json:"network"`
+	Db_id      string    `json:"db_id"`
+	Reference  string    `json:"reference"`
+	Recipient  string    `json:"recipient"`
+	Amount     float64   `json:"amount"`
+	Network    string    `json:"network"`
+	Expiration int64     `json:"expiration"`
+	CreatedAt  time.Time `json:"createdAt"`
 }
 
-func (c *Client) RegisterLink(db_id, reference, recipient, network string, amount float64) error {
+func (c *Client) RegisterLink(db_id, reference, recipient, network string, amount float64, expiration int64, createdAt time.Time) error {
 	registerLinkReq := registerLinkRequest{
-		Db_id:     db_id,
-		Reference: reference,
-		Recipient: recipient,
-		Amount:    amount,
-		Network:   network,
+		Db_id:      db_id,
+		Reference:  reference,
+		Recipient:  recipient,
+		Amount:     amount,
+		Network:    network,
+		Expiration: expiration,
+		CreatedAt:  createdAt,
 	}
 
 	body, err := json.Marshal(registerLinkReq)

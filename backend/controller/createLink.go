@@ -4,6 +4,7 @@ import (
 	"backend/repository"
 	"backend/service"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +20,7 @@ type CreateLinkRequest struct {
 	Recipient      string  `json:"recipient"`
 	Network        string  `json:"network"`
 	ExpectedAmount float64 `json:"expectedAmount"`
+	Expiration     int64   `json:"expiration"`
 }
 
 type CreateLinkResponse struct {
@@ -80,6 +82,8 @@ func (c *Controller) CreateLink(ctx *gin.Context) {
 		Network:        newLink.Network,
 		ExpectedAmount: newLink.ExpectedAmount,
 		Status:         LinkStatusCreated,
+		Expiration:     newLink.Expiration,
+		Expired:        false,
 	}
 
 	linkCreated, err := c.Database.CreateLink(linkRepo)
@@ -88,7 +92,9 @@ func (c *Controller) CreateLink(ctx *gin.Context) {
 		return
 	}
 
-	err = c.MonitorExternal.RegisterLink(linkCreated.ID, linkCreated.Reference, linkCreated.Recipient, linkCreated.Network, linkCreated.ExpectedAmount)
+	now := time.Now().UTC()
+
+	err = c.MonitorExternal.RegisterLink(linkCreated.ID, linkCreated.Reference, linkCreated.Recipient, linkCreated.Network, linkCreated.ExpectedAmount, newLink.Expiration, now)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

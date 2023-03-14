@@ -12,8 +12,9 @@ type LoginUserRequest struct {
 }
 
 type LoginUserResponse struct {
-	Token string `json:"token"`
-	Id    string `json:"id"`
+	Token    string `json:"token"`
+	Id       string `json:"id"`
+	Username string `json:"username"`
 }
 
 func (c *Controller) LoginUser(ctx *gin.Context) {
@@ -41,8 +42,9 @@ func (c *Controller) LoginUser(ctx *gin.Context) {
 	}
 
 	loginUserResponse := LoginUserResponse{
-		Token: response.Token,
-		Id:    user.ID,
+		Token:    response.Token,
+		Id:       user.ID,
+		Username: user.Username,
 	}
 
 	ctx.JSON(http.StatusOK, loginUserResponse)
