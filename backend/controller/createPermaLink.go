@@ -4,6 +4,7 @@ import (
 	"backend/repository"
 	"backend/service"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,11 @@ import (
 type CreatePermaLinkRequest struct {
 	UserId         string  `json:"userId"`
 	ExpectedAmount float64 `json:"expectedAmount"`
+}
+
+type CreatePermaLinkResponse struct {
+	Link string `json:"link"`
+	Code string `json:"code"`
 }
 
 func (c *Controller) CreatePermaLink(ctx *gin.Context) {
@@ -68,6 +74,7 @@ func (c *Controller) CreatePermaLink(ctx *gin.Context) {
 		Status:         LinkStatusCreated,
 		Expired:        false,
 		IsPermaLink:    true,
+		Code:           strconv.Itoa(service.RandomNumber()),
 	}
 
 	linkCreated, err := c.Database.CreateLink(linkRepo)
@@ -90,10 +97,10 @@ func (c *Controller) CreatePermaLink(ctx *gin.Context) {
 		return
 	}
 
-	createLinkResponse := CreateLinkResponse{
-		Link:      solanaPayLink,
-		Reference: reference,
+	createPermaLinkResponse := CreatePermaLinkResponse{
+		Link: linkRepo.Link,
+		Code: linkRepo.Code,
 	}
 
-	ctx.JSON(http.StatusOK, createLinkResponse)
+	ctx.JSON(http.StatusOK, createPermaLinkResponse)
 }

@@ -21,8 +21,13 @@ func (c *Controller) ListLink(ctx *gin.Context) {
 	network := ctx.Query("network")
 	recipient := ctx.Query("recipient")
 	status := ctx.Query("status")
+	permalink := ctx.Query("permalink")
+	permalinkB := false
+	if permalink != "" {
+		permalinkB = true
+	}
 
-	links, err := c.Database.ListLink(userId, status, network, recipient)
+	links, err := c.Database.ListLink(userId, status, network, recipient, permalinkB)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

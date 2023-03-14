@@ -25,6 +25,7 @@ type Link struct {
 	Expiration     int64      `bson:"expiration,omitempty"`
 	Expired        bool       `bson:"expired,omitempty"`
 	IsPermaLink    bool       `bson:"isPermaLink,omitempty"`
+	Code           string     `bson:"code,omitempty"`
 }
 
 func (c *ClientMongoDB) CreateLink(link Link) (*Link, error) {
@@ -81,11 +82,11 @@ func (c *ClientMongoDB) SearchByReference(reference string) (*Link, error) {
 	return &link, nil
 }
 
-func (c *ClientMongoDB) ListLink(userId string, status string, network string, recipient string) ([]Link, error) {
+func (c *ClientMongoDB) ListLink(userId string, status string, network string, recipient string, permalink bool) ([]Link, error) {
 	collection := c.Client.Database(c.DatabaseName).Collection(c.CollectionLink)
 
 	var links []Link
-	filter := bson.M{"userId": userId, "isPermaLink": bson.M{"$ne": true}}
+	filter := bson.M{"userId": userId, "isPermaLink": permalink}
 	if status != "" {
 		filter["status"] = status
 	}
