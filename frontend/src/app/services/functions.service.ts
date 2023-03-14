@@ -21,6 +21,28 @@ export namespace FunctionsServiceInterface {
       PublicKey: string;
       Nickname: string;
     }
+
+    export interface listLink {
+      ID: string;
+      Nickname: string;
+      UserId: string;
+      AccountId: string;
+      Link: string;
+      Reference: string;
+      Recipient: string;
+      Network: string;
+      ExpectedAmount: number;
+      AmountReceived: number;
+      Status: string;
+      CreatedAt: string;
+      ReceivedAt: string;
+      expand: boolean;
+    }
+
+    export interface createLink {
+      link: string;
+      reference: string;
+    }
   }
 
   export namespace Send {
@@ -34,6 +56,18 @@ export namespace FunctionsServiceInterface {
       publicKey: string;
       nickname: string;
     }
+
+    export interface listLink {
+      userId: string;
+    }
+
+    export interface createLink {
+      userId: string;
+      nickname: string;
+      recipient: string;
+      network: string;
+      expectedAmount: number;
+    }
   }
 }
 
@@ -45,7 +79,7 @@ export class FunctionsService {
 
   public userId = localStorage.getItem('id');
 
-  public baseUrl = 'http://localhost:3002/account';
+  public baseUrl = 'http://localhost:3002';
 
   public listAccount(): Observable<
     FunctionsServiceInterface.Receive.listAccount[]
@@ -56,7 +90,7 @@ export class FunctionsService {
     });
 
     return this.http.get<FunctionsServiceInterface.Receive.listAccount[]>(
-      `${this.baseUrl}?userId=${this.userId}`,
+      `${this.baseUrl}/account?userId=${this.userId}`,
       { headers: header }
     );
   }
@@ -70,7 +104,34 @@ export class FunctionsService {
     });
 
     return this.http.post<FunctionsServiceInterface.Receive.createAccount>(
-      `${this.baseUrl}`,
+      `${this.baseUrl}/account`,
+      params,
+      { headers: header }
+    );
+  }
+
+  public listLink(): Observable<FunctionsServiceInterface.Receive.listLink[]> {
+    const header = new HttpHeaders({
+      id: localStorage.getItem('id')!,
+      token: localStorage.getItem('token')!,
+    });
+
+    return this.http.get<FunctionsServiceInterface.Receive.listLink[]>(
+      `${this.baseUrl}/link?userId=${this.userId}`,
+      { headers: header }
+    );
+  }
+
+  public createLink(
+    params: FunctionsServiceInterface.Send.createLink
+  ): Observable<FunctionsServiceInterface.Receive.createLink> {
+    const header = new HttpHeaders({
+      id: localStorage.getItem('id')!,
+      token: localStorage.getItem('token')!,
+    });
+
+    return this.http.post<FunctionsServiceInterface.Receive.createLink>(
+      `${this.baseUrl}/link`,
       params,
       { headers: header }
     );

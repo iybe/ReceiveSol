@@ -16,6 +16,7 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { PaymentLinksComponent } from './pages/payment-links/payment-links.component';
 import { AccountComponent } from './pages/account/account.component';
 import { NewAccountComponent } from './modals/new-account/new-account.component';
+import { NewPaymentLinksComponent } from './modals/new-payment-link/new-payment-link.component';
 
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
@@ -31,6 +32,10 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 registerLocaleData(en);
 
@@ -43,6 +48,7 @@ registerLocaleData(en);
     PaymentLinksComponent,
     AccountComponent,
     NewAccountComponent,
+    NewPaymentLinksComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +69,10 @@ registerLocaleData(en);
     NzPopoverModule,
     NzDividerModule,
     NzModalModule,
+    NzBadgeModule,
+    NzDropDownModule,
+    NzListModule,
+    NzSelectModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],

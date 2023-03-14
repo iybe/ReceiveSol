@@ -1,0 +1,58 @@
+<div class="create-payment-link">
+  <div class="create-payment-link-form">
+    <form [formGroup]="newPaymentLinkForm">
+      <input
+        formControlName="nickname"
+        type="text"
+        nz-input
+        placeholder="Enter a nickname"
+        required="required"
+      />
+
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select a network"
+        formControlName="network"
+      >
+        <nz-option
+          *ngFor="let network of networks"
+          [nzLabel]="network"
+          [nzValue]="network"
+        ></nz-option>
+      </nz-select>
+
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select a account"
+        formControlName="recipient"
+      >
+        <nz-option
+          *ngFor="let account of accounts"
+          [nzLabel]="account.Nickname"
+          [nzValue]="account.PublicKey"
+        ></nz-option>
+      </nz-select>
+
+      <input
+        formControlName="expectedAmount"
+        type="number"
+        nz-input
+        placeholder="Enter a public key"
+        required="required"
+      />
+    </form>
+  </div>
+  <div class="create-payment-link-footer">
+    <a nz-button nzType="link" (click)="closeModal()">Cancel</a>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createPaymentLink()"
+      [disabled]="!newPaymentLinkForm.valid"
+    >
+      Create
+    </button>
+  </div>
+</div>

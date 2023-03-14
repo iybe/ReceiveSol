@@ -1,1 +1,53 @@
-Payment Links
+<div class="payment-link">
+  <nz-divider nzOrientation="left" nzText="Account"></nz-divider>
+
+  <div class="payment-link-top">
+    <button nz-button nzType="primary" (click)="newLink()">
+      <span nz-icon nzType="plus"></span>
+      New Account
+    </button>
+  </div>
+
+  <div class="payment-link-table">
+    <nz-table #nestedTable [nzData]="links" [nzPageSize]="10">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Nickname</th>
+          <th>Network</th>
+          <th>Expected Amount</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-template ngFor let-link [ngForOf]="links">
+          <tr>
+            <td [(nzExpand)]="link.expand"></td>
+            <td>{{ link.Nickname }}</td>
+            <td>{{ link.Network }}</td>
+            <td>{{ link.ExpectedAmount }}</td>
+            <td>{{ link.Status }}</td>
+            <td>
+              <button nz-button nzType="text">
+                <span nz-icon nzType="qrcode" nzTheme="outline"></span>
+              </button>
+            </td>
+          </tr>
+
+          <tr [nzExpand]="link.expand">
+            <ul>
+              <li><b>Link:</b> {{ link.Link }}</li>
+              <li><b>Reference: </b>{{ link.Reference }}</li>
+              <li><b>Recipient:</b> {{ link.Recipient }}</li>
+              <li><b>Amount Received:</b> {{ link.AmountReceived }}</li>
+              <li><b>Created At: </b>{{ link.CreatedAt }}</li>
+              <li><b>Received At:</b> {{ link.ReceivedAt }}</li>
+            </ul>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
