@@ -24,6 +24,7 @@ type Link struct {
 	ReceivedAt     string     `bson:"receivedAt,omitempty"`
 	Expiration     int64      `bson:"expiration,omitempty"`
 	Expired        bool       `bson:"expired,omitempty"`
+	IsPermaLink    bool       `bson:"isPermaLink,omitempty"`
 }
 
 func (c *ClientMongoDB) CreateLink(link Link) (*Link, error) {
@@ -68,11 +69,23 @@ func (c *ClientMongoDB) UpdateLinkStatus(id string, status string) error {
 	return nil
 }
 
+func (c *ClientMongoDB) SearchByReference(reference string) (*Link, error) {
+	collection := c.Client.Database(c.DatabaseName).Collection(c.CollectionLink)
+
+	var link Link
+	err := collection.FindOne(context.Background(), bson.M{"reference": reference}).Decode(&link)
+	if err != nil {
+		return nil, err
+	}
+
+	return &link, nil
+}
+
 func (c *ClientMongoDB) ListLink(userId string, status string, network string, recipient string) ([]Link, error) {
 	collection := c.Client.Database(c.DatabaseName).Collection(c.CollectionLink)
 
 	var links []Link
-	filter := bson.M{"userId": userId}
+	filter := bson.M{"userId": userId, "isPermaLink": bson.M{"$ne": true}}
 	if status != "" {
 		filter["status"] = status
 	}

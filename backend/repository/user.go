@@ -9,8 +9,10 @@ import (
 )
 
 type User struct {
-	ID       string `bson:"_id,omitempty"`
-	Username string `bson:"username"`
+	ID                 string `bson:"_id,omitempty"`
+	Username           string `bson:"username"`
+	RecipientPermaLink string `bson:"recipientPermaLink"`
+	NetworkPermaLink   string `bson:"networkPermaLink"`
 }
 
 func (c *ClientMongoDB) AddUser(user User) (*User, error) {
@@ -57,4 +59,15 @@ func (c *ClientMongoDB) GetUserById(id string) (*User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (c *ClientMongoDB) SetPermaLink(userId, recipient, network string) error {
+	collection := c.Client.Database(c.DatabaseName).Collection(c.CollectionUsers)
+	obj, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return err
+	}
+	collection.FindOneAndUpdate(context.Background(), bson.M{"_id": obj}, bson.M{"$set": bson.M{"recipientPermaLink": recipient, "networkPermaLink": network}})
+
+	return nil
 }
