@@ -84,6 +84,7 @@ func (c *Controller) CreateLink(ctx *gin.Context) {
 		Status:         LinkStatusCreated,
 		Expiration:     newLink.Expiration,
 		Expired:        false,
+		IsPermaLink:    false,
 	}
 
 	linkCreated, err := c.Database.CreateLink(linkRepo)
