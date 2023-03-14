@@ -91,5 +91,7 @@ func main() {
 	router.POST("/link", middlewareClient.AuthMiddleware, controllerClient.CreateLink)
 	router.GET("/link", middlewareClient.AuthMiddleware, controllerClient.ListLink)
 
+	router.GET("/solanalink", controllerClient.GetLink)
+
 	log.Fatal(router.Run(":" + PORT))
 }
