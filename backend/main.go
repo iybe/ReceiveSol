@@ -93,5 +93,7 @@ func main() {
 
 	router.GET("/solanalink", controllerClient.GetLink)
 
+	router.POST("/permalink", controllerClient.CreatePermaLink)
+
 	log.Fatal(router.Run(":" + PORT))
 }
