@@ -6,18 +6,21 @@ import { RegisterComponent } from './pages/register/register.component';
 import { MenuComponent } from './pages/menu/menu.component';
 import { PaymentLinksComponent } from './pages/payment-links/payment-links.component';
 import { AccountComponent } from './pages/account/account.component';
+import { CreatePermalinkComponent } from './pages/create-permalink/create-permalink.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'Receivesol', component: MenuComponent },
+  { path: 'receivesol', component: MenuComponent },
+
+  { path: 'permalink/:userId', component: CreatePermalinkComponent },
 
   {
-    path: 'Receivesol/account',
+    path: 'receivesol/account',
     component: AccountComponent,
   },
   {
-    path: 'Receivesol/payment-links',
+    path: 'receivesol/payment-links',
     component: PaymentLinksComponent,
   },
 

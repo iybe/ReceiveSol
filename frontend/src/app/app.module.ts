@@ -17,6 +17,7 @@ import { PaymentLinksComponent } from './pages/payment-links/payment-links.compo
 import { AccountComponent } from './pages/account/account.component';
 import { NewAccountComponent } from './modals/new-account/new-account.component';
 import { NewPaymentLinksComponent } from './modals/new-payment-link/new-payment-link.component';
+import { CreatePermalinkComponent } from './pages/create-permalink/create-permalink.component';
 
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
@@ -36,6 +37,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { OptionsPermalinkComponent } from './pages/options-permalink/options-permalink.component';
 
 registerLocaleData(en);
 
@@ -49,6 +51,8 @@ registerLocaleData(en);
     AccountComponent,
     NewAccountComponent,
     NewPaymentLinksComponent,
+    CreatePermalinkComponent,
+    OptionsPermalinkComponent,
   ],
   imports: [
     BrowserModule,

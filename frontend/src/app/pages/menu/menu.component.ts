@@ -13,15 +13,24 @@ export class MenuComponent implements OnInit {
 
   public account = true;
   public paymantLinks = false;
+  public permalinks = false;
 
   public changePage(page: string) {
     if (page === 'Account') {
       this.account = true;
       this.paymantLinks = false;
+      this.permalinks = false;
     }
 
     if (page === 'paymantLinks') {
       this.paymantLinks = true;
+      this.account = false;
+      this.permalinks = false;
+    }
+
+    if (page === 'permalinks') {
+      this.permalinks = true;
+      this.paymantLinks = false;
       this.account = false;
     }
   }

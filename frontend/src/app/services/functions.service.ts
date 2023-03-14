@@ -39,6 +39,25 @@ export namespace FunctionsServiceInterface {
       expand: boolean;
     }
 
+    export interface listPermaLink {
+      ID: string;
+      Nickname: string;
+      UserId: string;
+      AccountId: string;
+      Link: string;
+      Reference: string;
+      Recipient: string;
+      Network: string;
+      ExpectedAmount: number;
+      AmountReceived: number;
+      Status: string;
+      CreatedAt: string;
+      ReceivedAt: string;
+      expand: boolean;
+      IsPermaLink: boolean;
+      Code: string;
+    }
+
     export interface createLink {
       link: string;
       reference: string;
@@ -59,6 +78,7 @@ export namespace FunctionsServiceInterface {
 
     export interface listLink {
       userId: string;
+      permalink?: boolean;
     }
 
     export interface createLink {
@@ -118,6 +138,20 @@ export class FunctionsService {
 
     return this.http.get<FunctionsServiceInterface.Receive.listLink[]>(
       `${this.baseUrl}/link?userId=${this.userId}`,
+      { headers: header }
+    );
+  }
+
+  public listPermalink(): Observable<
+    FunctionsServiceInterface.Receive.listPermaLink[]
+  > {
+    const header = new HttpHeaders({
+      id: localStorage.getItem('id')!,
+      token: localStorage.getItem('token')!,
+    });
+
+    return this.http.get<FunctionsServiceInterface.Receive.listPermaLink[]>(
+      `${this.baseUrl}/link?userId=${this.userId}&permalink=true`,
       { headers: header }
     );
   }

@@ -1,0 +1,38 @@
+<div class="create-permalink" *ngIf="!showQrCode">
+  <div class="create-permalink-form">
+    <form [formGroup]="createPermalinkForm">
+      <input
+        formControlName="expectedAmount"
+        type="number"
+        nz-input
+        placeholder="Enter the value"
+        required="required"
+      />
+    </form>
+  </div>
+  <div class="create-permalink-footer">
+    <button
+      nz-button
+      nzType="primary"
+      (click)="createPermalink()"
+      [disabled]="!createPermalinkForm.valid"
+    >
+      Create
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showQrCode" class="create-permalink-qrcode">
+  <div class="create-permalink-qrcode-content">
+    <div id="qrCode" class="create-permalink-qrcode-content-img"></div>
+  </div>
+
+  <div class="create-permalink-qrcode-infos">
+    <p><b>Link:</b> {{ linkQrCode }}</p>
+    <p><b>Code:</b> {{ codePermalink }}</p>
+  </div>
+
+  <div class="create-permalink-qrcode-footer">
+    <a nz-button nzType="link" (click)="backPage()">Back</a>
+  </div>
+</div>

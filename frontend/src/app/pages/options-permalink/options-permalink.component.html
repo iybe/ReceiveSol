@@ -1,0 +1,140 @@
+<div *ngIf="havePermalink" class="have-permalink-config">
+  <nz-divider nzOrientation="left" nzText="Permalink"></nz-divider>
+
+  <div class="have-permalink-config-top">
+    <a nz-button nzType="link" [href]="permalinkUser">{{ permalinkUser }}</a>
+
+    <button nz-button nzType="primary" (click)="updateConfigPermalink()">
+      <span nz-icon nzType="edit"></span>
+      Update Permalink
+    </button>
+  </div>
+  <div class="have-permalink-config-table">
+    <nz-table #nestedTable [nzData]="permalink" nzShowPagination="false">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Nickname</th>
+          <th>Network</th>
+          <th>Expected Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-template ngFor let-link [ngForOf]="permalink">
+          <tr>
+            <td [(nzExpand)]="link.expand"></td>
+            <td>{{ link.Code }}</td>
+            <td>{{ link.Network }}</td>
+            <td>{{ link.ExpectedAmount }}</td>
+            <td>{{ link.Status }}</td>
+          </tr>
+
+          <tr [nzExpand]="link.expand">
+            <ul>
+              <li><b>Link:</b> {{ link.Link }}</li>
+              <li><b>Reference: </b>{{ link.Reference }}</li>
+              <li><b>Recipient:</b> {{ link.Recipient }}</li>
+              <li><b>Amount Received:</b> {{ link.AmountReceived }}</li>
+              <li><b>Created At: </b>{{ link.CreatedAt }}</li>
+              <li><b>Received At:</b> {{ link.ReceivedAt }}</li>
+            </ul>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+<div *ngIf="haventPermalink" class="havent-permalink-config">
+  <div class="havent-permalink-config-header">
+    <p>
+      You haven't a permalink, please fill in the information below to access
+      the page.
+    </p>
+  </div>
+  <div class="havent-permalink-config-form">
+    <form [formGroup]="configPermalinkForm">
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select a network"
+        formControlName="network"
+      >
+        <nz-option
+          *ngFor="let network of networks"
+          [nzLabel]="network"
+          [nzValue]="network"
+        ></nz-option>
+      </nz-select>
+
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select a account"
+        formControlName="recipientPermaLink"
+      >
+        <nz-option
+          *ngFor="let account of accounts"
+          [nzLabel]="account.Nickname"
+          [nzValue]="account.PublicKey"
+        ></nz-option>
+      </nz-select>
+    </form>
+  </div>
+  <div class="havent-permalink-config-footer">
+    <button
+      nz-button
+      nzType="primary"
+      (click)="updatePermalink()"
+      [disabled]="!configPermalinkForm.valid"
+    >
+      Done
+    </button>
+  </div>
+</div>
+
+<div *ngIf="updateConfPermalink" class="update-permalink-config">
+  <div class="update-permalink-config-form">
+    <form [formGroup]="configPermalinkForm">
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select a network"
+        formControlName="network"
+      >
+        <nz-option
+          *ngFor="let network of networks"
+          [nzLabel]="network"
+          [nzValue]="network"
+        ></nz-option>
+      </nz-select>
+
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select a account"
+        formControlName="recipientPermaLink"
+      >
+        <nz-option
+          *ngFor="let account of accounts"
+          [nzLabel]="account.Nickname"
+          [nzValue]="account.PublicKey"
+        ></nz-option>
+      </nz-select>
+    </form>
+  </div>
+  <div class="update-permalink-config-footer">
+    <a nz-button nzType="link" (click)="backToPermalink()">Back</a>
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="updatePermalink()"
+      [disabled]="!configPermalinkForm.valid"
+    >
+      Done
+    </button>
+  </div>
+</div>
