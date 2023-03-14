@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
       (response) => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('id', response.id);
+        localStorage.setItem('username', response.username);
 
         this.notify.success('Success', 'Login success');
         this.router.navigate(['/Receivesol']);

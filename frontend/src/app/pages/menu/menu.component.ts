@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class MenuComponent implements OnInit {
   constructor(private router: Router) {}
 
-  public userName: string = 'MadalenaCampos'; // localStorage.getItem('userName');
+  public userName: string = localStorage.getItem('username')!;
 
   public account = true;
   public paymantLinks = false;

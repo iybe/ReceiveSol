@@ -11,6 +11,7 @@ export namespace SsoServiceInterface {
     export interface Login {
       token: string;
       id: string;
+      username: string;
     }
   }
 
