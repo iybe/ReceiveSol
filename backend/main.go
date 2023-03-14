@@ -83,6 +83,7 @@ func main() {
 
 	router.POST("/user", controllerClient.CreateUser)
 	router.POST("/user/login", controllerClient.LoginUser)
+	router.POST("/user/permalink", middlewareClient.AuthMiddleware, controllerClient.UpdateUserPermaLink)
 
 	router.POST("/account", middlewareClient.AuthMiddleware, controllerClient.RegisterAccount)
 	router.GET("/account", middlewareClient.AuthMiddleware, controllerClient.ListAccount)
