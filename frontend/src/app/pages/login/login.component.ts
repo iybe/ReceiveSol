@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('username', response.username);
 
         this.notify.success('Success', 'Login success');
-        this.router.navigate(['/Receivesol']);
+        this.router.navigate(['/receivesol']);
         this.loadingButton = false;
       },
       ({ error }) => {
