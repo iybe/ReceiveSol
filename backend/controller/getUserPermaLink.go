@@ -38,7 +38,7 @@ func (c *Controller) GetUserPermaLink(ctx *gin.Context) {
 	getUserPermaLinkResponse := GetUserPermaLinkResponse{
 		RecipientPermaLink: user.RecipientPermaLink,
 		NetworkPermaLink:   user.NetworkPermaLink,
-		Url:                fmt.Sprintf("%s/permalink/%s", c.Url, user.RecipientPermaLink),
+		Url:                fmt.Sprintf("%s/permalink/%s", c.Url, userId),
 	}
 
 	ctx.JSON(http.StatusOK, getUserPermaLinkResponse)
