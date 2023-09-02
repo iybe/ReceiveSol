@@ -1,3 +1,7 @@
+# About Project
+
+Application that allows you to create and track payment links in solana through solana pay. Created for solana's hackathon the grizzlython.
+
 # Running the Project
 
 The project consists of 3 microservices, 1 frontend, and 1 MongoDB database.
